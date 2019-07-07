@@ -1,6 +1,6 @@
-package com.example.devintensive.models
+package ru.skillbranch.devintensive.models
 
-import com.example.devintensive.utils.Utils
+import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
 class User (
@@ -11,7 +11,7 @@ class User (
     var rating:Int = 0,
     var respect:Int = 0,
     var lastVisit:Date? = null,
-    var isOnline:Boolean? = false
+    var isOnline:Boolean = false
     ) {
 
     constructor(id:String, firstName: String?, lastName: String?): this(
@@ -24,21 +24,19 @@ class User (
     constructor(id: String) : this(id, "John", "Doo")
 
     init {
+        println(
+            "It`s Alive!!!\n" +
+                    "${if (lastName === "Doe") "His name is $firstName $lastName"
+                    else "And his name is $firstName $lastName!!!"}\n"
+        )
     }
 
     companion object Factory {
-        private var lastId : Int = -1
-        fun makeUser(fullName:String?) : User {
+        private var lastId = -1
+        fun makeUser(fullName: String?): User {
             lastId++
-
-            var (firstName, lastName) = Utils.parseFullName(fullName)
-
-            if(firstName == null || lastName == null) {
-                return User(id = "$lastId")
-            }
-            else {
-                return User(id = "$lastId", firstName = firstName, lastName = lastName)
-            }
+            val (firstName, lastName) = Utils.parseFullName(fullName)
+            return User("$lastId", firstName ?: "John", lastName ?: "Doe")
         }
     }
 

@@ -1,19 +1,14 @@
-package com.example.devintensive.utils
+package ru.skillbranch.devintensive.utils
 
 object Utils {
     fun parseFullName(fullName:String?):Pair<String?, String?>{
 
-        val parts : List<String>? = fullName?.split(" ")
+        val fullNameWithout = fullName?.trim()
+        val parts = fullNameWithout?.split(" ")
+        val firstName = parts?.getOrNull(0).orEmpty().ifEmpty { null }
+        val lastName = parts?.getOrNull(1).orEmpty().ifEmpty { null }
 
-        var firstName = parts?.getOrNull(0)
-        var lastName = parts?.getOrNull(1)
-
-        if(firstName == null || firstName == "")
-            return Pair(null, null)
-        if(lastName == null || lastName == "")
-            return Pair(firstName, null)
-
-        return Pair(firstName, lastName)
+        return firstName to lastName
     }
 
     fun transliteration(payload: String, divider:String = " "): String {
@@ -21,16 +16,23 @@ object Utils {
     }
 
     fun toInitials(firstName: String?, lastName: String?): String? {
-        if(firstName == null || firstName == "" || firstName == " ")
-            return null
 
-        if(lastName == null || lastName == "" || lastName == " ")
-            return firstName?.substring(0,1)?.toUpperCase()
+        val firstNameInitial = firstName?.trim()?.getOrNull(0)?.toUpperCase()
+        val lastNameInitial = lastName?.trim()?.getOrNull(0)?.toUpperCase()
+        val firstInit: String
+        val lastInit: String
 
-        var firstNameInitial = firstName?.substring(0,1)?.toUpperCase()
-        var lastNameInitial = lastName?.substring(0,1)?.toUpperCase()
+        firstInit = when(firstNameInitial == null) {
+            true -> ""
+            false -> firstNameInitial.toString()
+        }
 
-        return "$firstNameInitial$lastNameInitial"
+        lastInit = when(lastNameInitial == null) {
+            true -> ""
+            false -> lastNameInitial.toString()
+        }
+
+        return "$firstInit$lastInit".ifEmpty { null }
 
     }
 }
